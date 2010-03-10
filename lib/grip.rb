@@ -1,4 +1,5 @@
 require 'mime/types'
+require 'wand'
 
 # require 'tempfile'
 # if thumbnailable?
@@ -29,7 +30,7 @@ module Grip
         self["#{name}_id"]   = Mongo::ObjectID.new
         self["#{name}_size"] = File.size(file)
         self["#{name}_name"] = File.basename(file.path)
-        self["#{name}_type"] = file.content_type rescue MIME::Types.type_for(file.path).to_s
+        self["#{name}_type"] = Wand.wave(file.path)
         self.class.attachment_definitions[name] = file
       end
     end
