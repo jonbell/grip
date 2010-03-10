@@ -19,4 +19,4 @@ This gives you #image, #image=, #pdf, and #pdf=. The = methods take any IO that 
 == Dependencies
 
 * MongoMapper 0.7.1 - gem install mongo_mapper
-* Wand - gem install wand
+* Wand >= 0.2.1 - gem install wand

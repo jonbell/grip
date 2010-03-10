@@ -1,13 +1,6 @@
 require 'mime/types'
 require 'wand'
 
-# require 'tempfile'
-# if thumbnailable?
-#   tmp = Tempfile.new("thumb_#{filename}")
-#   MojoMagick::resize(uploaded_file.path, tmp.path, {:width => 50, :height => 40, :scale => '>'})
-#   self.thumbnail = tmp.read
-# end
-
 module Grip
   module ClassMethods
     def attachment(name)
@@ -50,7 +43,7 @@ module Grip
         self.class.attachment_definitions.each do |attachment|
           name, file = attachment
           content_type = self["#{name}_type"]
-          
+
           if file.respond_to?(:read)
             self.class.grid.put(file.read, self["#{name}_name"], :content_type => content_type, :_id => self["#{name}_id"])
           end
