@@ -15,3 +15,8 @@ Declare the plugin and use the attachment method to make attachments.
   end
 
 This gives you #image, #image=, #pdf, and #pdf=. The = methods take any IO that responds to read (File, Tempfile, etc). The image and pdf methods return a GridIO instance (can be found in the ruby driver).
+
+== Dependencies
+
+* MongoMapper 0.7.1 - gem install mongo_mapper
+* Wand - gem install wand
