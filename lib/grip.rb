@@ -10,9 +10,9 @@ module Grip
       after_save     :save_attachments
       before_destroy :destroy_attached_files
 
-      key "#{name}_id".to_sym,    ObjectId
-      key "#{name}_name".to_sym,  String
-      key "#{name}_size".to_sym,  Integer
+      key "#{name}_id".to_sym,   ObjectId
+      key "#{name}_name".to_sym, String
+      key "#{name}_size".to_sym, Integer
       key "#{name}_type".to_sym, String
 
       define_method(name) do
