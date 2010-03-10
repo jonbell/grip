@@ -1,7 +1,6 @@
 require 'test/unit'
 require 'pp'
 
-gem 'mongo_mapper', '0.7.1'
 require 'mongo_mapper'
 
 require File.expand_path(File.dirname(__FILE__) + '/../lib/grip')
