@@ -2,72 +2,67 @@ require "test_helper"
 
 class Foo
   include MongoMapper::Document
-  include Grip
-  
-  has_grid_attachment :image
-  has_grid_attachment :pdf
+  plugin Grip
+
+  attachment :image
+  attachment :pdf
 end
 
 class GripTest < Test::Unit::TestCase
   def setup
-    MongoMapper.connection.drop_database "test-attachments"
-    MongoMapper.database = "test-attachments"
-    
+    MongoMapper.database.collections.each(&:remove)
+    @grid = Mongo::Grid.new(MongoMapper.database)
+
     dir    = File.dirname(__FILE__) + '/fixtures'
     @pdf   = File.open("#{dir}/sample.pdf",  'r')
+    @pdf_contents = File.read("#{dir}/sample.pdf")
     @image = File.open("#{dir}/cthulhu.png", 'r')
-    
+    @image_contents = File.read("#{dir}/cthulhu.png")
+
     @doc = Foo.create(:image => @image, :pdf => @pdf)
     @doc.reload
   end
-  
+
   def teardown
     @pdf.close
     @image.close
   end
-  
+
   test "assigns keys correctly" do
     assert_equal 27582, @doc.image_size
     assert_equal 8775,  @doc.pdf_size
-    
+
     assert_equal 'cthulhu.png', @doc.image_name
     assert_equal 'sample.pdf',  @doc.pdf_name
-    
-    assert_equal "image/png",       @doc.image_content_type
-    assert_equal "application/pdf", @doc.pdf_content_type
-    
-    assert_equal "foo/image/#{@doc.id}", @doc.image_path
-    assert_equal "foo/pdf/#{@doc.id}",   @doc.pdf_path
-    
-    collection = MongoMapper.database['fs.files']
-    
-    assert_equal "image/png", collection.find_one(:filename => @doc.image_path)['contentType']
-    assert_equal "application/pdf", collection.find_one(:filename => @doc.pdf_path)['contentType']
+
+    assert_equal "image/png",       @doc.image_type
+    assert_equal "application/pdf", @doc.pdf_type
+
+    assert_not_nil @doc.image_id
+    assert_not_nil @doc.pdf_id
+    assert_kind_of Mongo::ObjectID, @doc.image_id
+    assert_kind_of Mongo::ObjectID, @doc.pdf_id
+
+    assert_equal "image/png", @grid.get(@doc.image_id).content_type
+    assert_equal "application/pdf", @grid.get(@doc.pdf_id).content_type
   end
-  
-  test "responds to dynamic keys" do
-    [ :pdf_size, :pdf_path, :pdf_name, :pdf_content_type,
-      :image_size, :image_path, :image_name, :image_content_type
+
+  test "responds to keys" do
+    [ :pdf_size,   :pdf_id,   :pdf_name,   :pdf_type,
+      :image_size, :image_id, :image_name, :image_type
     ].each do |method|
       assert @doc.respond_to?(method)
     end
   end
-  
+
   test "saves attachments correctly" do
-    assert_equal @image.read, @doc.image
-    assert_equal @pdf.read,   @doc.pdf
-    
-    assert GridFS::GridStore.exist?(MongoMapper.database, @doc.image_path)
-    assert GridFS::GridStore.exist?(MongoMapper.database, @doc.pdf_path)
+    assert_equal @pdf_contents, @doc.pdf.read
+    assert_equal @image_contents, @doc.image.read
   end
-  
+
   test "cleans up attachments on destroy" do
-    assert GridFS::GridStore.exist?(MongoMapper.database, @doc.image_path)
-    assert GridFS::GridStore.exist?(MongoMapper.database, @doc.pdf_path)
-    
     @doc.destroy
-    
-    assert ! GridFS::GridStore.exist?(MongoMapper.database, @doc.image_path)
-    assert ! GridFS::GridStore.exist?(MongoMapper.database, @doc.pdf_path)
+    assert_raises(Mongo::GridError) { @grid.get(@doc.image_id) }
+    assert_raises(Mongo::GridError) { @grid.get(@doc.pdf_id) }
   end
 end

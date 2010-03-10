@@ -1,11 +1,12 @@
 require 'test/unit'
 require 'pp'
 
+gem 'mongo_mapper', '0.7.1'
 require 'mongo_mapper'
 
 require File.expand_path(File.dirname(__FILE__) + '/../lib/grip')
 
-MongoMapper.database = "test-attachments"
+MongoMapper.database = "testing"
 
 class Test::Unit::TestCase
   def self.test(name, &block)
