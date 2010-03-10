@@ -1,0 +1,17 @@
+= Grip
+
+Attachment plugin for MongoMapper that uses GridFS.
+
+== Usage
+
+Declare the plugin and use the attachment method to make attachments.
+
+  class Foo
+    include MongoMapper::Document
+    plugin Grip
+
+    attachment :image
+    attachment :pdf
+  end
+
+This gives you #image, #image=, #pdf, and #pdf=. The = methods take any IO that responds to read (File, Tempfile, etc). The image and pdf methods return a GridIO instance (can be found in the ruby driver).
