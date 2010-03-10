@@ -20,9 +20,13 @@ Gem::Specification.new do |s|
     ".gitignore",
      "LICENSE",
      "README.rdoc",
+     "Rakefile",
+     "jnunemaker-grip.gemspec",
      "lib/grip.rb",
+     "lib/grip/version.rb",
      "test/fixtures/cthulhu.png",
      "test/fixtures/sample.pdf",
+     "test/helper.rb",
      "test/test_grip.rb"
   ]
   s.homepage = %q{http://github.com/jnunemaker/grip}
