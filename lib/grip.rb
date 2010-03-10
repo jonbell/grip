@@ -22,8 +22,12 @@ module Grip
       define_method("#{name}=") do |file|
         self["#{name}_id"]   = Mongo::ObjectID.new
         self["#{name}_size"] = File.size(file)
-        self["#{name}_name"] = File.basename(file.path)
         self["#{name}_type"] = Wand.wave(file.path)
+        self["#{name}_name"] = if file.respond_to?(:original_filename)
+          file.original_filename
+        else
+          File.basename(file.path)
+        end
         self.class.attachment_definitions[name] = file
       end
     end

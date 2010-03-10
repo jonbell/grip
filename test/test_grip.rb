@@ -32,9 +32,6 @@ class GripTest < Test::Unit::TestCase
     assert_equal 27582, @doc.image_size
     assert_equal 8775,  @doc.pdf_size
 
-    assert_equal 'cthulhu.png', @doc.image_name
-    assert_equal 'sample.pdf',  @doc.pdf_name
-
     assert_equal "image/png",       @doc.image_type
     assert_equal "application/pdf", @doc.pdf_type
 
@@ -45,6 +42,25 @@ class GripTest < Test::Unit::TestCase
 
     assert_equal "image/png", @grid.get(@doc.image_id).content_type
     assert_equal "application/pdf", @grid.get(@doc.pdf_id).content_type
+  end
+
+  test "assigns file name from path if original file name not available" do
+    assert_equal 'cthulhu.png', @doc.image_name
+    assert_equal 'sample.pdf',  @doc.pdf_name
+  end
+
+  test "assigns file name from original filename if available" do
+    begin
+      file = Tempfile.new('testing.txt')
+      def file.original_filename
+        'testing.txt'
+      end
+      
+      doc = Foo.create(:image => file)
+      assert_equal 'testing.txt', doc.image_name
+    ensure
+      file.close
+    end
   end
 
   test "responds to keys" do
