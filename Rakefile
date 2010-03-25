@@ -6,12 +6,12 @@ require File.join(File.dirname(__FILE__), 'lib', 'grip', 'version')
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name        = "jnunemaker-grip"
+    gem.name        = "jonbell-grip"
     gem.summary     = %Q{Attachment plugin for MongoMapper that uses GridFS.}
     gem.description = %Q{Attachment plugin for MongoMapper that uses GridFS.}
     gem.email       = "nunemaker@gmail.com"
-    gem.homepage    = "http://github.com/jnunemaker/grip"
-    gem.authors     = ["John Nunemaker"]
+    gem.homepage    = "http://github.com/jonbell/grip"
+    gem.authors     = ["John Nunemaker", "Jonathan Bell"]
     gem.version     = Grip::Version
 
     gem.add_dependency 'wand', '>= 0.2.1'

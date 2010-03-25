@@ -33,11 +33,15 @@ module Grip
     end
 
     def grid
-      @grid ||= Mongo::Grid.new(database)
+      @grid ||= Mongo::Grid.new(MongoMapper.database)
     end
 
     def attachment_definitions
       read_inheritable_attribute(:attachment_definitions)
+    end
+    
+    def _root_document
+      
     end
   end
 
