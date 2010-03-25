@@ -18,11 +18,15 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".gitignore",
+     ".loadpath",
+     ".project",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
+     "jonbell-grip.gemspec",
      "lib/grip.rb",
      "lib/grip/version.rb",
+     "test/fixtures/azathoth.jpg",
      "test/fixtures/cthulhu.png",
      "test/fixtures/sample.pdf",
      "test/helper.rb",
