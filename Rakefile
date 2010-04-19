@@ -15,7 +15,7 @@ begin
     gem.version     = Grip::Version
 
     gem.add_dependency 'wand', '>= 0.2.1'
-    gem.add_development_dependency 'mongo_mapper', '0.7.1'
+    gem.add_development_dependency 'mongo_mapper', '0.7.4'
     gem.add_development_dependency 'shoulda'
   end
   Jeweler::GemcutterTasks.new

@@ -51,9 +51,9 @@ class GripTest < Test::Unit::TestCase
     assert_not_nil @doc.image_id
     assert_not_nil @doc.pdf_id
     assert_not_nil embedded_doc.file_id
-    assert_kind_of Mongo::ObjectID, @doc.image_id
-    assert_kind_of Mongo::ObjectID, @doc.pdf_id
-    assert_kind_of Mongo::ObjectID, embedded_doc.file_id
+    assert_kind_of BSON::ObjectID, @doc.image_id
+    assert_kind_of BSON::ObjectID, @doc.pdf_id
+    assert_kind_of BSON::ObjectID, embedded_doc.file_id
 
     assert_equal "image/png", @grid.get(@doc.image_id).content_type
     assert_equal "application/pdf", @grid.get(@doc.pdf_id).content_type
@@ -96,9 +96,9 @@ class GripTest < Test::Unit::TestCase
 
   test "cleans up attachments on destroy" do
     @doc.destroy
-    assert_raises(Mongo::GridError) { @grid.get(@doc.image_id) }
-    assert_raises(Mongo::GridError) { @grid.get(@doc.pdf_id) }
-    assert_raises(Mongo::GridError) { @grid.get(embedded_doc.file_id) }
+    assert_raises(Mongo::GridFileNotFound) { @grid.get(@doc.image_id) }
+    assert_raises(Mongo::GridFileNotFound) { @grid.get(@doc.pdf_id) }
+    assert_raises(Mongo::GridFileNotFound) { @grid.get(embedded_doc.file_id) }
   end
   
   def embedded_doc

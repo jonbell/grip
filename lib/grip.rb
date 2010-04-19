@@ -20,7 +20,7 @@ module Grip
       end
 
       define_method("#{name}=") do |file|
-        self["#{name}_id"]   = Mongo::ObjectID.new
+        self["#{name}_id"]   = BSON::ObjectID.new
         self["#{name}_size"] = File.size(file)
         self["#{name}_type"] = Wand.wave(file.path)
         self["#{name}_name"] = if file.respond_to?(:original_filename)
@@ -53,7 +53,7 @@ module Grip
           content_type = self["#{name}_type"]
 
           if file.respond_to?(:read)
-            self.class.grid.put(file.read, self["#{name}_name"], :content_type => content_type, :_id => self["#{name}_id"])
+            self.class.grid.put(file.read, :filename => self["#{name}_name"], :content_type => content_type, :_id => self["#{name}_id"])
           end
         end
       end
